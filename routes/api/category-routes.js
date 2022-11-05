@@ -23,21 +23,36 @@ router.get('/:id', async (req, res) => {
   res.json(categoryData);
 });
   
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
-  Category.create()
+  const categoryData = await Category.create(req.body);
+  res.json(categoryData);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  const categoryData = await Category.update(req.body, {
+    where: {
+      id: req.params.id
+    },
+  });
+  if (!categoryData) {
+    res.json({ message: 'No match found!' });
+    return;
+  }
+  res.json(categoryData);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  const categoryData = await Category.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+  res.json(categoryData);
 });
 
 module.exports = router;
-
-
 
 

@@ -21,13 +21,25 @@ router.get('/:id', async (req, res) => {
   })
   res.json(tagData);
 });
-router.post('/', (req, res) => {
+
+router.post('/', async  (req, res) => {
   // create a new tag
-  Tag.create(req.body)
+  const tagData = await Tag.create(req.body);
+  res.json(tagData);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a tag's name by its `id` value
+  const tagData = await Tag.update(req.body, {
+    where: {
+      id: req.params.id
+    },
+  });
+  if (!tagData) {
+    res.json({ message: 'No match found!' });
+    return;
+  }
+  res.json(tagData);
 });
 
 router.delete('/:id', async (req, res) => {
